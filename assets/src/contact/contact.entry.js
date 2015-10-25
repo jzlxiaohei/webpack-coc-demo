@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import data from 'js/data.js'
+import data from './js/data.js'
 
 
 

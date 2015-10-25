@@ -1,13 +1,12 @@
 #基于gulp+webpack的"约定大于配置"的构建方案探讨
 
-这不到半年的时间，玩了很多东西。有些觉得不错的新技术，直接拿到公司的项目里去挖坑。感觉进步很大，但是看看工程，啥都有。单看模块管理，从遗留的requirejs，到我过来改用的browserify，以及现在的es6 module，都有，乱糟糟的感觉。然后有天老大发现：现在发布，前端的构建时间比后端好长。重新做构建方案已经变成了一个自己想做，又有可能升值加薪的事~~
+这不到半年的时间，玩了很多东西。有些觉得不错的新技术，直接拿到公司的项目里去挖坑。感觉进步很大，但是看看工程，啥都有。单看模块管理，从遗留的requirejs，到我过来改用的browserify，以及现在的es6 module，都有，乱糟糟的感觉。然后有天老大发现：现在发布，前端的构建时间比后端还长。重新做构建方案已经变成了一个自己想做，又有可能升值加薪的事~~
 
-
-##运行demo
-
+##示例代码
+ 在[github上](https://github.com/jzlxiaohei/webpack-coc)，自取。
 
 ##假设与前提
-我非常推崇`分治`的开发方式。我改了一个页面，对其他页面最好不要产生任何影响。开发环境也可以单独针对某个页面，不需要去编译打包其他页面的东西。这就要求，除了一些基本不会改变的公用js框架，js库，公用样式，以及logo图片之类的东西，其他的代码，每个页面的代码完全独立，最高从文件夹层面的分离。这样的话，比如有个页面，如果不再需要，直接把文件夹删就ok了。
+我非常推崇`分治`的开发方式。改了一个页面，对其他页面最好不要产生任何影响。开发环境也可以单独针对某个页面，不需要去编译打包其他页面的东西。这就要求，除了一些基本不会改变的公用js框架，js库，公用样式，以及logo图片之类的东西，其他的代码，每个页面的代码完全独立，最好从文件夹层面的分离。这样的话，比如有个页面，如果不再需要，直接把文件夹删就ok了。
 
 `demo`的目录结构是这样的
 
@@ -17,7 +16,7 @@
 
 所以这里假设的`构建方案`是：
 
-1. 多个页面，每个页面相互独立，只打包自己的东西。如果页面不要了，直接删了文件就ok。
+1. 多个页面，每个页面相互独立，如果页面不要了，直接删了文件夹就ok。
 
 2. 开发时，只构建自己的东西，因为如果项目有20，30个页面，我现在只开发index，打包、watch其他页面的代码，会影响我的开发效率。
 
@@ -29,7 +28,7 @@
 ##约定大于配置
 有使用后端开发框架的同学，应该都知道这个说法。只要按照一定的约定去写代码，框架会帮你做一个自动的处理。比如以文件名以`controller`结尾的,是控制器，然后对应的路由会自动生成等。
 
-很早之前就在想，能不能前端也有`约定大于配置`的构建方案。我觉得各大公司肯定有相应的方案，但是我没见到。我希望一套方案，直接拿过去，npm一下，按照相应的约定去写，构建自动完成。
+很早之前我就在想，能不能前端也有`约定大于配置`的构建方案。我觉得各大公司肯定有相应的方案，但是我没见到。我希望一套方案，直接拿过去，npm一下，按照相应的约定去写，构建自动完成。
 
 这里托`webpack`的福，能比较容易的做出我满意的方案。`webpack`以模块为设计出发点，所有资源都当成模块,css,js,图片,模版文件等等。
 
@@ -39,7 +38,7 @@
 
 // and emits static assets representing those modules.
 
-所以实际上，我需要知道每个页面的入口文件，就能自动构建每个页面的所有代码和资源。（这么一说，我好像什么也不用做-_-!）。然后配合gulp，去动态生成一下东西。gulp + webpack的基本玩法就是 配置一个基础的webpackConfig，gulp的task里，根据需要，动态微调基本的webpackConfig。
+所以实际上，我需要知道每个页面的入口文件，就能自动构建每个页面的所有代码和资源。（这么一说，我好像什么也不用做-_-!）。然后配合gulp，去动态微调一些配置。`gulp + webpack`的基本玩法就是 配置一个基础的webpackConfig，gulp的task里，根据需要，动态微调基本的webpackConfig。
 
 ##具体使用
 首先看代码怎么写。既然`分治`了，那么先只看`index`文件夹。目录结构说明如下：
@@ -94,10 +93,10 @@
 	index.entry-[hash].css	
 	img/[hash].jpg 	
 	
-在`assets\assets-map.json`,有路径的映射。
+在`assets\assets-map.json`,有路径的映射。（这里用的file-loader处理图片，实际url-loader更好，不过用法上，一般就加一个limit，这里就不赘述了）
 	
 ##单个页面实现
-对webpack熟悉的同学，应该会觉得这很普通。
+对webpack熟悉的同学，应该会觉得这很普通。类似下面的配置：
 
 	entry: {'/index.entry':"./assets/src/index/index.entry.js"},
     output: {
@@ -153,7 +152,7 @@
 
 都是些常用的配置和插件，有几点需要的注意的地方
 
-1. output的`filename`要有`[chunkhash]`,使用`[hash]`的话，不同的entry文件，会是同一个`hash`.原因看[文档](https://webpack.github.io/docs/long-term-caching.html)
+1. output的`filename`要有`[chunkhash]`,使用`[hash]`的话，同一次构建，不同的entry文件，会是同一个`hash`.原因看[文档](https://webpack.github.io/docs/long-term-caching.html)
 2. 使用了`assets-webpack-plugin`生成文件的路径映射。
 3. `externals`把公用的库排除掉。公用库会去生成`lib.js`,`lib.css`
 
@@ -166,7 +165,7 @@
   	'/index.entry': './assets/src/index/index.entry.js'
   	}
   	
-还记得我们的约定吗（说着有点怪。。），有点感觉了吗。选出来所以`*.entry.js`文件，稍作处理就好了。
+还记得我们的约定吗（说着有点怪。。），选出来所有的`*.entry.js`文件，稍作处理就好了。
 
 	var entries = {}
 
@@ -204,6 +203,8 @@ lib实际上就是把上面`exteranls`里的东西，统一打个包。
 
 为啥不用`CommonsChunkPlugin`？因为这些东西很明显是属于lib的，不用每次都去构建不需要构建的代码。
 
+运行 `gulp lib`后，dist下，就会生成`lib-[hash].js` 和`lib-[hash].css`
+
 
 =====
 
@@ -211,9 +212,9 @@ lib实际上就是把上面`exteranls`里的东西，统一打个包。
 
 ====
 
-这里的分隔线，实际上，基本的构建已经完成了。对照下上面说的4点
+实际上，基本的构建已经完成了。对照下上面说的4点
 
->1.多个页面，每个页面相互独立，只打包自己的东西。如果页面不要了，直接删了文件就ok。
+>1.多个页面，每个页面相互独立，如果页面不要了，直接删了文件夹就ok。
 
 index 和 contact的所有东西都是独立的。这点没问题。
 
@@ -282,32 +283,103 @@ index 和 contact的所有东西都是独立的。这点没问题。
 
 	script(src=getStatic('/lib.js'))
 		
-##写点html
+
+##运行demo
+说了半天，到现在没有任何可以看的效果。其实最大的效果，都在`assets/dist`里。不过为了大家看效果，多写点，能够运行。运行方式：
+
+[github](https://github.com/jzlxiaohei/webpack-coc)上clone下来，然后
+
+	npm i
+	gulp
+	node index.js
+	
+浏览器打开
+    http://localhost:3333/contact.html
+    http://localhost:3333/index.html
+
+效果很简单（简直是粗糙），但是构建的很多方面都有涉及了。
 
 
-就是不需要套页面，页面加载后，在通过`ajax`去生成界面。我们这里没有ajax，意思一下。
+看一下`assets/dist`里的`index.html`和`contact.html`，是完全静态的页面。如果不需要首屏数据,都是通过ajax生成的话，这就是一个完全静态化的方案。只需要nginx 指向`dist`文件夹下，就发布好了。这里为了大家运行方便，就express 去做静态文件服务器，道理是一样的。
 
-难点只有一个，就是路径的问题。找`webpack`的插件吧。这里使用：`html-webpack-plugin`.
+构建完全静态化的东西，难点只有一个，就是路径的问题。找`webpack`的插件吧。这里使用：`html-webpack-plugin`.它会根据模板，自动在head里插入`chunks`的css，在body底部插入`chunks`的js。刚开始的时候，我使用模板文件（路径./assets/webpack-tpl.html'）去生成。
+
+	<!DOCTYPE html>
+    <html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>webpack coc</title>
+        <!--lib是所有页面公用的。-->
+        <!--需要自动生成一下-->
+        <link href="/lib.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="mount-dom"></div>
+        <script src="/lib.js"></script>
+    </body>
+    </html>
+生成后，`index.html` 和 `contact.html`会插入相应模块的js和css。但是lib呢，怎么把`hash`加上?我写了个简单的插件。webpack的插件，最简单的，就是一个`function`
+
+	//帮助函数
+	function getTplContent(libJs,libCss) {
+        var str = `
+    <!DOCTYPE html>
+        <html>
+        <head lang="en">
+            <meta charset="UTF-8">
+            <title>webpack coc</title>
+            <link href="${libCss}" rel="stylesheet">
+        </head>
+        <body>
+            <div id="mount-dom"></div>
+            <script src="${libJs}"></script>
+        </body>
+    </html>
+        `;
+        return str
+    }
+    
+    //插件，只在执行lib时插入。
+    function libPathPlugin(){
+        this.plugin("done", function(stats) {
+            var stats = stats.toJson()
+            var chunkFiles = stats.chunks[0].files
+            var libJs ='',libCss='';
+            for(var i in chunkFiles){
+                var fileName = chunkFiles[i]
+                if(fileName.endsWith('.js')){
+                    libJs = fileName
+                }
+                if(fileName.endsWith('.css')){
+                    libCss = fileName
+                }
+            }
+            globalTplContent = getTplContent(libJs,libCss)
+        });
+    }
+    
+this.plugin 的第一个参数是构建的阶段，有`after-emit`,`emit`,`done`等。第二个就是负责执行构建逻辑的函数了。关键是这个`stats`参数，里面有大量丰富的信息，建议大家把它打印处理，好好看看。这里只需要知道最终生成了文件名是什么。`stats.toJson().chunks`里有。这里只有`lib`一个模块，所以简单处理一下，就能得到`html-webpack-plugin`需要的模板内容。
+
+另外，一个HtmlWebpackPlugin，只能生成一个html，我们有多entry,有多个HtmlWebpackPlugin。相关的配置都有说明，另外可以看文档。
 
 	 for(var i in entries){
         config.plugins.push(new HtmlWebpackPlugin({
             filename:(i +'.html').replace('entry.',''),//index.entry => index.html
-            template: './assets/webpack-tpl.html',//模板文件路径，里面把lib设置好。
+            //template:'./assets/webpack-tpl.html'
+            templateContent:globalTplContent 
             inject: true,
             chunks:[i] //只注入当前的chunk，index.html注入index.entry
         }))
     }
  
-对每一个HtmlWebpackPlugin，只能生成一个html，我们有多entry,所以有多个HtmlWebpackPlugin。上面的配置都有说明，另外可以看文档。
-
 
 
 ##考虑前端分离
-现在的前端项目是和后端一起的。在一起的好处，就是发布都扔给他们了。但是你的构建方案一般要收到一些约束，而且使用新技术的时候，很可能会本限制（比如GraphQL）。所以首先想把前端项目拆出来。
+光有一个项目的方案还不行，实际上，我们现在已经有多个相对独立的前端项目.继续`分治`
 
 ![前后端分离的方案](front-back.png)
 
-分离出来话，有两种方案：
+个人觉得，大体上有两种方案：
 
 1. `模板 + ajax`。
 
@@ -316,7 +388,7 @@ index 和 contact的所有东西都是独立的。这点没问题。
 2. `node做api中间层`
 最简单的情况就是node做个api代理，然后顺便可以简单的套个首屏页面。当然加这一层会给前端几乎无限的可能性。你可以实现自己的缓存策略，对感兴趣的数据进行统计（因为api转接，所以用户请求的数据以及返回的数据，都能拿到。）等。就是工作量略有上升，另外要肩负node运维的职责。node挂了怎么办；升级怎么保证不间断服务等。
 
-另外拆出来不是放到一个工程下，而且分成若干工程。这也和我们的实际情况有关，我们现在有七八个相对独立的项目，一下全重构也不现实。
+通过上图能看出来，这个架构是这样的：
 
-另外这也与`分治思想`相契合.
+前端分成多个小项目，都依赖于`api server` => 每一个前端，都使用上面的 `gulp+ webpack`的方案，把页面分开。这与`分治思想`相契合.重写哪一个，代价都不算太高。
 
