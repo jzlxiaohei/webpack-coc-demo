@@ -2,6 +2,7 @@ import React from 'react'
 import jQuery from 'jquery'
 import ReactDOM from 'react-dom'
 
+import './reset.less'
 
 window.React = React
 window.jQuery = jQuery

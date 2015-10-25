@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import data from './src/data.js'
+import data from 'js/data.js'
 
 
 
@@ -14,9 +14,18 @@ class List extends React.Component{
         })
 
         return(
-            <ul>
-                {list}
-            </ul>
+            <div>
+                <button onClick={
+                    e=>{
+                        require.ensure([],function(){
+                            require('./js/async')
+                        })
+                    }
+                }>按需加载</button>
+                <ul>
+                    {list}
+                </ul>
+            </div>
         )
     }
 }

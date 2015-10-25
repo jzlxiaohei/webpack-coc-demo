@@ -2,19 +2,20 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var webpack = require('webpack')
 var path = require('path')
 var AssetsPlugin         = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin({});
+var assetsPluginInstance = new AssetsPlugin({filename:'assets/assets-map.json',update: true,prettyPrint: true})
+
 var autoprefixer = require('autoprefixer');
 var precss      = require('precss');
 
 
 module.exports = {
-    //entry: "./client/Index.jsx",
+    //entry: {'index.entry':"./assets/src/index/index.entry.js"},
     entry: {
 
     },
     output: {
-        filename: "[name].js?hash=[hash]",
-        chunkFilename:'[name].js',
+        filename: "[name]-[chunkhash].js",
+        chunkFilename:'[name]-[chunkhash].js',
         path: path.join(__dirname + "/assets/dist"),
         libraryTarget:'umd',
         sourceMapFilename:'[name].map',
@@ -33,6 +34,12 @@ module.exports = {
             commonjs2: 'jquery',
             commonjs: 'jquery',
             amd: 'jquery'
+        },
+        'react-dom':{
+            root:'ReactDOM',
+            commonjs2: 'react-dom',
+            commonjs: 'react-dom',
+            amd:'react-dom'
         }
         //'wscn-common':{
         //    commonjs2:'wscn-common',
@@ -54,12 +61,12 @@ module.exports = {
                 test: /\.less$/,
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader')
             },
-            { test: /\.(png|jpg|gif)$/, loader: 'file-loader?name=img/[hash].[ext]' }
+            { test: /\.(png|jpg|gif)$/, loader: 'file-loader?name=/img/[hash].[ext]' }
         ]
     },
     devtool:'source-map',
     plugins: [
-        new ExtractTextPlugin("[name].css"),
+        new ExtractTextPlugin("[name]-[chunkhash].css"),
         new webpack.optimize.UglifyJsPlugin({
             mangle: {
                 except: ['$', 'exports', 'require']

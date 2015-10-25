@@ -7,17 +7,56 @@ var path = require('path');
 var _ = require('lodash')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
+//es6 template string，需要node 4.0 以上版本，如果版本不到，只能手动拼了
+function getTplContent(libJs,libCss) {
+    var str = `
+<!DOCTYPE html>
+    <html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>webpack coc</title>
+        <link href="/${libJs}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="mount-dom"></div>
+        <script src="/${libCss}"></script>
+    </body>
+</html>
+    `;
+    return str
+}
+
+var globalTplContent ;
+
+function libPathPlugin(){
+    this.plugin("done", function(stats) {
+        var stats = stats.toJson()
+        var chunkFiles = stats.chunks[0].files
+        var libJs ='',libCss='';
+        for(var i in chunkFiles){
+            var fileName = chunkFiles[i]
+            if(fileName.endsWith('.js')){
+                libJs = fileName
+            }
+            if(fileName.endsWith('.css')){
+                libCss = fileName
+            }
+        }
+        globalTplContent = getTplContent(libJs,libCss)
+    });
+}
 
 gulp.task('lib',function(callback){
     var config = _.merge({},webpackConfig)
     config.entry = {
-        'lib':['./assets/src/lib/lib.js']
+        '/lib':['./assets/src/lib/lib.js']
     }
     config.externals={}
-
+    config.plugins = config.plugins || [];
+    config.plugins.push(libPathPlugin);
     webpack(config,function(err,stats){
         if(err) {
-            throw new gutil.PluginError("webpack-build", err);
+            throw new gutil.PluginError("webpack-lib", err);
         }
         if(typeof callback=='function'){
             callback();
@@ -34,7 +73,6 @@ gulp.task('default',['lib'],function(){
 
     for(var i = 0;i<entryFiles.length;i++){
         var filePath = entryFiles[i];
-        //var key = path.relative('./assets/src',filePath)
         key = filePath.substring(filePath.lastIndexOf(path.sep),filePath.lastIndexOf('.'))
         entries[key] = path.join(__dirname,filePath);
     }
@@ -48,7 +86,7 @@ gulp.task('default',['lib'],function(){
     for(var i in entries){
         config.plugins.push(new HtmlWebpackPlugin({
             filename:(i +'.html').replace('entry.',''),
-            template: './assets/webpack-tpl.html',
+            templateContent:globalTplContent,
             inject: true,
             chunks:[i]
         }))
