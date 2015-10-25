@@ -1,0 +1,18 @@
+{
+  "lib": {
+    "js": "lib-10f18497706c12d176ca.js",
+    "css": "lib-10f18497706c12d176ca.css",
+    "sourcemap": "lib.map"
+  },
+  "/contact.entry": {
+    "js": "/contact.entry-13d63f328f24d49333e0.js"
+  },
+  "/index.entry": {
+    "js": "/index.entry-49439db136370b4c9cbf.js",
+    "css": "/index.entry-49439db136370b4c9cbf.css"
+  },
+  "/lib": {
+    "js": "/lib-8afc15af540b33572a0a.js",
+    "css": "/lib-8afc15af540b33572a0a.css"
+  }
+}
