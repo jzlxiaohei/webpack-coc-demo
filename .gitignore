@@ -29,5 +29,5 @@ build/Release
 node_modules
 
 .idea
-
+assets/dist
 
