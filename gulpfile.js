@@ -56,7 +56,7 @@ gulp.task('lib', function (callback) {
 
 gulp.task('default', ['lib'], function () {
     //gulp.task('default',function(){
-
+    //gulp clean
     var entries = {};
 
     var entryFiles = glob.sync('assets/src/**/*.entry.js');
