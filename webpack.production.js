@@ -64,7 +64,7 @@ module.exports = {
     },
     devtool:'sourcemap',
     plugins: [
-        new ExtractTextPlugin("[name]-[chunkhash].css"),
+        new ExtractTextPlugin("css/[name]-[chunkhash].css"),
         new webpack.optimize.UglifyJsPlugin({
             mangle: {
                 except: ['$', 'exports', 'require']

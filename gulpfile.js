@@ -21,7 +21,8 @@ var globalTplContent;
 function libPathPlugin() {
     this.plugin('done', function (stats) {
         var stats = stats.toJson();
-        var chunkFiles = stats.chunks[0].files;
+        var chunkFiles = stats.chunks[0].files
+        console.log(chunkFiles)
         var libJs = '',
             libCss = '';
         for (var i in chunkFiles) {
@@ -40,7 +41,7 @@ function libPathPlugin() {
 gulp.task('lib', ['clean'],function (callback) {
     var config = _.merge({}, webpackConfig);
     config.entry = {
-        '/lib': ['./assets/src/lib/lib.js']
+        'lib': ['./assets/src/lib/lib.js']
     };
     config.externals = {};
     config.plugins = config.plugins || [];
@@ -56,7 +57,7 @@ gulp.task('lib', ['clean'],function (callback) {
 });
 
 gulp.task('clean',function(){
-    return gulp.src('assets/dist',{read:false})
+    return gulp.src(['assets/dist/*','assets/assets-map.json'],{read:false})
         .pipe(clean())
 })
 
@@ -69,7 +70,7 @@ gulp.task('default', ['lib'], function () {
 
     for (var i = 0; i < entryFiles.length; i++) {
         var filePath = entryFiles[i];
-        var key = filePath.substring(filePath.lastIndexOf(path.sep), filePath.lastIndexOf('.'));
+        var key = filePath.substring(filePath.lastIndexOf(path.sep)+1, filePath.lastIndexOf('.'));
         entries[key] = path.join(__dirname, filePath);
     }
 

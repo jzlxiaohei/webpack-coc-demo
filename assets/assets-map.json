@@ -1,13 +1,13 @@
 {
-  "/contact.entry": {
-    "js": "/contact.entry-fb98f0b902bf156eee40.js"
+  "lib": {
+    "js": "lib-068b11e55f9e40db4f71.js",
+    "css": "css/lib-068b11e55f9e40db4f71.css"
   },
-  "/index.entry": {
-    "js": "/index.entry-6243bfc8c16e640efd81.js",
-    "css": "/index.entry-6243bfc8c16e640efd81.css"
+  "contact.entry": {
+    "js": "contact.entry-891771bd9eef7b392c67.js"
   },
-  "/lib": {
-    "js": "/lib-816c426d79719dc41b37.js",
-    "css": "/lib-816c426d79719dc41b37.css"
+  "index.entry": {
+    "js": "index.entry-4b76a54cf755c090de9f.js",
+    "css": "css/index.entry-4b76a54cf755c090de9f.css"
   }
 }
