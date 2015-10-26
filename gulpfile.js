@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var clean = require('gulp-clean');
 var glob = require('glob');
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.production.js');
@@ -36,7 +37,7 @@ function libPathPlugin() {
     });
 }
 
-gulp.task('lib', function (callback) {
+gulp.task('lib', ['clean'],function (callback) {
     var config = _.merge({}, webpackConfig);
     config.entry = {
         '/lib': ['./assets/src/lib/lib.js']
@@ -53,6 +54,11 @@ gulp.task('lib', function (callback) {
         }
     });
 });
+
+gulp.task('clean',function(){
+    return gulp.src('assets/dist',{read:false})
+        .pipe(clean())
+})
 
 gulp.task('default', ['lib'], function () {
     //gulp.task('default',function(){
