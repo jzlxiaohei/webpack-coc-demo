@@ -1,18 +1,13 @@
 {
-  "lib": {
-    "js": "lib-10f18497706c12d176ca.js",
-    "css": "lib-10f18497706c12d176ca.css",
-    "sourcemap": "lib.map"
-  },
   "/contact.entry": {
     "js": "/contact.entry-fb98f0b902bf156eee40.js"
   },
   "/index.entry": {
-    "js": "/index.entry-e26d54a6af36844781fa.js",
-    "css": "/index.entry-e26d54a6af36844781fa.css"
+    "js": "/index.entry-6243bfc8c16e640efd81.js",
+    "css": "/index.entry-6243bfc8c16e640efd81.css"
   },
   "/lib": {
-    "js": "/lib-8afc15af540b33572a0a.js",
-    "css": "/lib-8afc15af540b33572a0a.css"
+    "js": "/lib-816c426d79719dc41b37.js",
+    "css": "/lib-816c426d79719dc41b37.css"
   }
 }

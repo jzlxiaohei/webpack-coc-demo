@@ -104,7 +104,6 @@
         chunkFilename:'[name].js',
         path: __dirname + "/dist",
         libraryTarget:'umd',
-        sourceMapFilename:'[name].map',
         publicPath:''
     },
     externals:{

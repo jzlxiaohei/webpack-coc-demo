@@ -11,14 +11,12 @@ var precss      = require('precss');
 module.exports = {
     //entry: {'index.entry':"./assets/src/index/index.entry.js"},
     entry: {
-
     },
     output: {
         filename: "[name]-[chunkhash].js",
         chunkFilename:'[name]-[chunkhash].js',
         path: path.join(__dirname + "/assets/dist"),
         libraryTarget:'umd',
-        sourceMapFilename:'[name].map',
         publicPath:''//webpack-dev-server build的文件是在内存里的，使用时，在硬盘上看不到生成的文件。这个路径是静态文件的basePath
     },
     //devtool: 'eval',
@@ -59,12 +57,12 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader')
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader!less-loader')
             },
             { test: /\.(png|jpg|gif)$/, loader: 'file-loader?name=/img/[hash].[ext]' }
         ]
     },
-    devtool:'source-map',
+    devtool:'sourcemap',
     plugins: [
         new ExtractTextPlugin("[name]-[chunkhash].css"),
         new webpack.optimize.UglifyJsPlugin({

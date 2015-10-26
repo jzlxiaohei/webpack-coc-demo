@@ -1,11 +1,9 @@
 
-
 import ReactDom from 'react-dom'
 import IndexComponent from './js/IndexComponent.js'
 
 import './less/index.less'
 
-console.log(111)
 ReactDom.render(
     (
         <div>

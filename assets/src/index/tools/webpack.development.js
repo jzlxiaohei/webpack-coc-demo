@@ -6,10 +6,10 @@ module.exports = {
     entry: {
         'index.entry':[
             '../index.entry.js'
+        ],
+        'lib':[
+            '../../lib/lib.js'
         ]
-        //'lib':[
-        //    '../../lib/lib.js'
-        //]
     },
     output: {
         filename: "[name].js",
