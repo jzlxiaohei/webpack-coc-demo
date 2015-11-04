@@ -7,7 +7,7 @@ var assetsPluginInstance = new AssetsPlugin({filename:'assets/assets-map.json',u
 var autoprefixer = require('autoprefixer');
 var precss      = require('precss');
 
-
+var node_modules = path.join(__dirname,'./node_modules');
 module.exports = {
     //entry: {'index.entry':"./assets/src/index/index.entry.js"},
     entry: {
@@ -44,7 +44,20 @@ module.exports = {
         //    commonjs:'wscn-common'
         //}
     },
+
+    resolve:{
+        alias:{
+            react:path.join(node_modules,'./react/dist/react.min.js'),
+            jquery:path.join(node_modules,'./jquery/dist/jquery.min.js'),
+            'react-dom':path.join(node_modules,'./react-dom/dist/react-dom.min.js'),
+        }
+    },
     module: {
+        noParse:[
+            path.join(node_modules,'./react/dist/react.min.js'),
+            path.join(node_modules,'./jquery/dist/jquery.min.js'),
+            path.join(node_modules,'./react-dom/dist/react-dom.min.js')
+        ],
         loaders: [
             {
                 test: /[\.jsx|\.js ]$/,
@@ -68,6 +81,28 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             mangle: {
                 except: ['$', 'exports', 'require']
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name:'commons',
+            filename:'commons.js',
+            minChunks:function(module,count){
+                //引用测试大于某个次数
+                if(count>=3){
+                    return true;
+                }
+
+                //符合某种格式
+                var resourceName = module.resource
+                if(resourceName){
+                    resourceName = resourceName.substring(resourceName.lastIndexOf(path.sep)+1)
+                }
+                var reg = /^(\w)+.common/
+                if(reg.test(resourceName)){
+                    return true;
+                }
+
+                return false;
             }
         }),
         assetsPluginInstance

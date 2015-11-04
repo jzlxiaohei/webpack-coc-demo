@@ -1,13 +1,19 @@
 {
   "lib": {
-    "js": "lib-068b11e55f9e40db4f71.js",
-    "css": "css/lib-068b11e55f9e40db4f71.css"
+    "js": "lib-1ce1fed8ff319f871f55.js",
+    "css": "css/lib-1ce1fed8ff319f871f55.css"
+  },
+  "commons": {
+    "js": "commons.js"
   },
   "contact.entry": {
-    "js": "contact.entry-891771bd9eef7b392c67.js"
+    "js": "contact.entry-39dc4fa6394eabd6198d.js"
   },
   "index.entry": {
-    "js": "index.entry-4b76a54cf755c090de9f.js",
-    "css": "css/index.entry-4b76a54cf755c090de9f.css"
+    "js": "index.entry-5e28628d4fe1bb22445b.js",
+    "css": "css/index.entry-5e28628d4fe1bb22445b.css"
+  },
+  "other.entry": {
+    "js": "other.entry-10ba02a1d9f566f7be19.js"
   }
 }

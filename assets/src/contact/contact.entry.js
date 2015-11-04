@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+
+import '../much_use/much_use'
 import data from './js/data.js'
 
 

@@ -45,7 +45,16 @@ gulp.task('lib', ['clean'],function (callback) {
     };
     config.externals = {};
     config.plugins = config.plugins || [];
-    config.plugins.push(libPathPlugin);
+    var plugins = config.plugins;
+    //lib直接引用打包好的文件,不用Uglify.这对打包lib的速度,有重要影响
+    for(var i in plugins){
+        if(plugins[i] instanceof webpack.optimize.UglifyJsPlugin){
+            plugins.splice(i,1)
+            break;
+        }
+    }
+
+    plugins.push(libPathPlugin);
     webpack(config, function (err, stats) {
         if (err) {
             throw new gutil.PluginError('webpack-lib', err);
@@ -107,3 +116,51 @@ if (!String.prototype.endsWith) {
         return lastIndex !== -1 && lastIndex === position;
     };
 }
+
+
+/** ===================== develop config  ============= **/
+var getDevelopConfig = require('./assets/src/webpack.development')
+var WebpackDevServer = require('webpack-dev-server')
+
+gulp.task('dev-server',function(){
+    //var argv = require('yargs').argv;
+    //var folder = argv['f'];
+    //if(!folder){
+    //    folder='**'
+    //}
+    //var entryFiles = glob.sync(basePath+'/'+folder+'/*.entry.js')
+    //if(entryFiles.length==0){
+    //    throw new Error('can not find *.entry.js in folder:'+folder);
+    //}
+
+    var entryFiles = glob.sync(__dirname+'/assets/src/**/*.entry.js')
+
+    var port = 9527;
+    var webpackDevConfig = getDevelopConfig();
+
+    for(var i in entryFiles){
+        var filePath = entryFiles[i]
+        var key = filePath.substring(filePath.lastIndexOf(path.sep)+1, filePath.lastIndexOf('.'));
+        webpackDevConfig.entry[key] = [
+            'webpack-dev-server/client?http://0.0.0.0:'+port,
+            'webpack/hot/dev-server',
+            filePath];
+    }
+
+
+    new WebpackDevServer(webpack(webpackDevConfig),{
+        publicPath:webpackDevConfig.output.publicPath,
+        hot:true,
+        inline: true,
+        stats: {
+            colors:true
+        }
+        //proxy: [ {
+        //    path:/\/api(.*)/,
+        //    target:'http://localhost:3001'
+        //} ],
+        //historyApiFallback: true
+    }).listen(port,'localhost',function (err) {
+        if(err) throw new gutil.PluginError('webpack-dev-server',err)
+    })
+})
