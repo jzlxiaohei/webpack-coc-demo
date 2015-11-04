@@ -53,6 +53,13 @@ gulp.task('lib', ['clean'],function (callback) {
             break;
         }
     }
+    //lib,不需要commons的处理
+    for(var i in plugins){
+        if(plugins[i] instanceof webpack.optimize.CommonsChunkPlugin){
+            plugins.splice(i,1)
+            break;
+        }
+    }
 
     plugins.push(libPathPlugin);
     webpack(config, function (err, stats) {
