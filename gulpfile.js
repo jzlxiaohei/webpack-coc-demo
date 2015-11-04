@@ -94,7 +94,7 @@ gulp.task('default', ['lib'], function () {
             filename: (i + '.html').replace('entry.', ''),
             templateContent: globalTplContent,
             inject: true,
-            chunks: [i]
+            chunks: [i,'commons']
         }));
     }
 
@@ -123,17 +123,17 @@ var getDevelopConfig = require('./assets/src/webpack.development')
 var WebpackDevServer = require('webpack-dev-server')
 
 gulp.task('dev-server',function(){
-    //var argv = require('yargs').argv;
-    //var folder = argv['f'];
-    //if(!folder){
-    //    folder='**'
-    //}
-    //var entryFiles = glob.sync(basePath+'/'+folder+'/*.entry.js')
-    //if(entryFiles.length==0){
-    //    throw new Error('can not find *.entry.js in folder:'+folder);
-    //}
+    var argv = require('yargs').argv;
+    var folder = argv['f'];
+    if(!folder){
+        folder='**'
+    }
+    var entryFiles = glob.sync(__dirname+'/assets/src/'+folder+'/*.entry.js')
 
-    var entryFiles = glob.sync(__dirname+'/assets/src/**/*.entry.js')
+    if(entryFiles.length==0){
+        throw new Error('can not find *.entry.js in folder:'+folder);
+    }
+
 
     var port = 9527;
     var webpackDevConfig = getDevelopConfig();

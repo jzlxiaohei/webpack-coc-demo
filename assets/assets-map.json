@@ -4,14 +4,14 @@
     "css": "css/lib-1ce1fed8ff319f871f55.css"
   },
   "commons": {
-    "js": "commons.js"
+    "js": "commons-9c7e8e815be3ef6febae.js"
   },
   "contact.entry": {
     "js": "contact.entry-39dc4fa6394eabd6198d.js"
   },
   "index.entry": {
-    "js": "index.entry-5e28628d4fe1bb22445b.js",
-    "css": "css/index.entry-5e28628d4fe1bb22445b.css"
+    "js": "index.entry-b04e51c8fd6ad21d738a.js",
+    "css": "css/index.entry-b04e51c8fd6ad21d738a.css"
   },
   "other.entry": {
     "js": "other.entry-10ba02a1d9f566f7be19.js"

@@ -28,7 +28,8 @@
     "react-dom": "^0.14.0",
     "react-mixin": "^3.0.0",
     "react-router": "1.0.0-rc1",
-    "redux": "^2.0.0"
+    "redux": "^2.0.0",
+    "yargs": "^3.29.0"
   },
   "devDependencies": {
     "url-loader": "^0.5.6",

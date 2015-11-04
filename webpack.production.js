@@ -85,7 +85,7 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name:'commons',
-            filename:'commons.js',
+            filename:'commons-[chunkhash].js',
             minChunks:function(module,count){
                 //引用测试大于某个次数
                 if(count>=3){
