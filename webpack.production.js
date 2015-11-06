@@ -18,7 +18,7 @@ module.exports = {
         chunkFilename:'[name]-[chunkhash].js',
         path: path.join(__dirname , "./assets/dist/"+project_name),
         libraryTarget:'umd',
-        publicPath:'/'+project_name//webpack-dev-server build的文件是在内存里的，使用时，在硬盘上看不到生成的文件。这个路径是静态文件的basePath
+        publicPath:'/'+project_name+'/'//webpack-dev-server build的文件是在内存里的，使用时，在硬盘上看不到生成的文件。这个路径是静态文件的basePath
     },
     //devtool: 'eval',
     externals:{
