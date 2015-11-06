@@ -7,13 +7,13 @@
     "js": "/webpack_coccontact.entry-39dc4fa6394eabd6198d.js"
   },
   "index.entry": {
-    "js": "/webpack_cocindex.entry-b0fa3a8bd595c6a692bb.js",
-    "css": "/webpack_cocindex.entry-b0fa3a8bd595c6a692bb.css"
+    "js": "/webpack_cocindex.entry-3d3f770ce81bbcd175bd.js",
+    "css": "/webpack_cocindex.entry-3d3f770ce81bbcd175bd.css"
   },
   "other.entry": {
     "js": "/webpack_cocother.entry-10ba02a1d9f566f7be19.js"
   },
   "commons": {
-    "js": "/webpack_coccommons-6161de6f1640aa9ec406.js"
+    "js": "/webpack_coccommons-5e426f188a761c0eca01.js"
   }
 }
