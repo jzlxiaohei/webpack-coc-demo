@@ -57,7 +57,7 @@ module.exports = {
         noParse:[
             path.join(node_modules,'./react/dist/react.min.js'),
             path.join(node_modules,'./jquery/dist/jquery.min.js'),
-            path.join(node_modules,'./react-dom/dist/react-dom.min.js')
+            //path.join(node_modules,'./react-dom/dist/react-dom.min.js')
         ],
         loaders: [
             {
